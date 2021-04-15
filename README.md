@@ -1,5 +1,5 @@
 # TermPlay
-A Front-End written in Python3 for [play-audio](https://github.com/termux/play-audio) on Android
+*-A Front-End written in Python3 for [play-audio](https://github.com/termux/play-audio) on Android-*
 
 > This project can be used as a packaged application to be used in [Micro-for-Android](https://github.com/TimeATronics/Micro-for-Android) or on [Termux](https://github.com/termux/termux-app)
 
