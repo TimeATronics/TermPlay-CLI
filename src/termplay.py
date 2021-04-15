@@ -43,6 +43,7 @@ opus", "OPUS", "aiff", "AIFF"]
 
 class tabCompleter(object):
 	""" Taken from another github project for tab completion"""
+	# https://gist.github.com/iamatypeofwalrus/5637895
 
 	def pathCompleter(self, text, state):
 		try:
