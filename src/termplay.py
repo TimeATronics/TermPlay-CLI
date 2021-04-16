@@ -36,9 +36,9 @@ from awesome_progress_bar import ProgressBar
 # Initialise for console output
 console = Console()
 # Supported extensions
-ext = ["mp3", "MP3", "FLAC", "flac", "wav", "WAV", "\
+ext = ("mp3", "MP3", "FLAC", "flac", "wav", "WAV", "\
 m4a", "M4A", "OGG", "ogg", "wma", "WMA", "aac", "AAC", "\
-opus", "OPUS", "aiff", "AIFF"]
+opus", "OPUS", "aiff", "AIFF")
 
 
 class tabCompleter(object):
@@ -101,7 +101,7 @@ def folderInput():
 				for i in x:
 					name = str(userfolder + i)
 					# Check if extension names in filename and then add to file_list
-					if os.path.isfile(name) and any(z in name for z in ext):
+					if os.path.isfile(name) and name.endswith(ext):
 						file_list.append(i)
 				if len(file_list) != 0:
 					break
