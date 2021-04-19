@@ -25,9 +25,8 @@ import sys
 import subprocess
 import datetime
 import multiprocessing
-import readline
 import glob
-# readline and glob for tab completion
+# glob for folder list
 from rich.console import Console
 from tinytag import TinyTag
 from time import sleep
@@ -41,31 +40,6 @@ m4a", "M4A", "OGG", "ogg", "wma", "WMA", "aac", "AAC", "\
 opus", "OPUS", "aiff", "AIFF")
 
 
-class tabCompleter(object):
-	""" Taken from another github project for tab completion"""
-	# https://gist.github.com/iamatypeofwalrus/5637895
-
-	def pathCompleter(self, text, state):
-		try:
-			line = readline.get_line_buffer().split()
-			return [x for x in glob.glob(text + '*')][state]
-		except KeyboardInterrupt:
-			print("\n")
-
-	def createListCompleter(self, ll):
-		try:
-			def listCompleter(text, state):
-				line = readline.get_line_buffer()
-				if not line:
-					return [c + " " for c in ll][state]
-				else:
-					return [c + " " for c in ll if c.startswith(line)][state]
-			self.listCompleter = listCompleter
-
-		except KeyboardInterrupt:
-			print("\n")
-
-
 def folderInput():
 	# list of music files
 	global file_list
@@ -74,20 +48,14 @@ def folderInput():
 	try:
 		while True:
 			console.print("Type :q or :quit to exit\n", style="b green", justify="center")
-			console.print("Press TAB to see suggestions\n", style="b green", justify="center")
+			console.print("Type :all to list a few suggestions\n", style="b green", justify="center")
 			console.print("Enter name of directory:\n", style="b magenta")
 			console.print(">>> ", style="b red", end="")
 
-			# For autocompletion:
-			t = tabCompleter()
-			listcomp = [":q", ":quit"] + glob.glob("\
+			listcomp = [":q", ":quit", ":all"] + glob.glob("\
 /storage/*/") + glob.glob("/storage/*/*/") + glob.glob("\
 /storage/*/*/*/") + glob.glob("/storage/emulated/0/*/") + glob.glob("\
 /storage/emulated/0/*/*/")
-			t.createListCompleter(listcomp)
-			readline.set_completer_delims('\t')
-			readline.parse_and_bind("tab: complete")
-			readline.set_completer(t.listCompleter)
 
 			userfolder = (input())
 
@@ -113,6 +81,15 @@ def folderInput():
 				console.print("\nExiting Now", style="b red")
 				sleep(2)
 				clearScreen()
+				sys.exit()
+
+			elif userfolder == "/storage/:all/":
+				for i in listcomp:
+					console.print(i)
+				print()
+			
+			elif userfolder == "/storage/emulated/":
+				console.print("This folder cannot be accessed\n", style="b red")
 				sys.exit()
 
 			else:
@@ -233,6 +210,7 @@ an integer below {} or more than -1".format(len(file_list)), style="b red")
 					continue
 
 				elif isinstance(choice, float) and choice == 0.1:
+					clearScreen()
 					console.print("\n\tStopping Playback", style="b cyan")
 					console.print("\n\tExiting Now\n", style="b red")
 					killAll()
